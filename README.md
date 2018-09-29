@@ -1,0 +1,2 @@
+# computational_trajectory_optimizaiton
+Computational physics project
