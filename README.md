@@ -5,9 +5,15 @@ spaceship/rocket starting on the x-axis will need to optimize its path through
 the stars such that it 1) can only move forward (90 degrees) or diagonally 
 (45 degrees or 135 degrees) 2) wants to optimize its path based on the least 
 amount of changes of direction (or possibly the least amount of fuel, where it 
-takes less fuel to change a direction 90 degrees vs 45 degrees). 
+takes less fuel to change a direction 90 degrees vs 45 degrees).
+
+Below lies a slice of the first quadrant of stars, mapped onto a small integer
+grid. 
 ![map](pics/250map.png)
+The total data forms a sphere around the origin.
 ![all stars](pics/3d_stars.png)
+The sphere itself is hollow.
+![hollow](pics/3d_hollow.png)
 
 > The atoms of our bodies are traceable to stars that manufactured them in their
 > cores and exploded these enriched ingredients across our galaxy, billions of 

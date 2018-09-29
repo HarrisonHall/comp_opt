@@ -16,7 +16,7 @@ with open("hygdata_v3.csv") as datafile:
             y = int(float(row[18]))
             z = int(float(row[19]))
             #if (x >= 0 and y > 0):
-            if (True):
+            if (z > 0):
                 #print("x "+str(x)+" y "+str(y)+" z "+str(z))
                 tot += 1
                 totx.append(x)
