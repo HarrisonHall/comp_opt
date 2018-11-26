@@ -4,6 +4,7 @@ from mod import engine as eng
 import math
 import time
 import random
+import copy
 random.seed(time.clock())
 
 def sim_single_one_print(universe,d_theta,d_phi,d_t,engine1,engine2, mass_kg, speed_kmps): 
@@ -52,20 +53,43 @@ def sim_single_one_print(universe,d_theta,d_phi,d_t,engine1,engine2, mass_kg, sp
             break
     return
 
-def sim_rec_print(universe,d_theta,d_phi,d_t,engine1,engine2, mass_kg, speed_kmps): #d_theta from x, d_phi from x-y
-    '''
-    Check base cases{
-        if out of fuel:
-            print/record details
-            return
-    }
-    Move/update stars
-    Move forward with d_t
-    for star in bucket:
-        if star near rocket:
-            sim_rec_print() (fuel for new direction)
-    
-    '''
+def sim_rec_print(universe,d_t,engine,mass_kg,empty_mass,speed_kmps,total_paths): #d_theta from x, d_phi from x-y
+    x,y,z = (0,0,0)
+    dir_x = 1 * math.cos(45) * math.sin(45) * (180 / math.pi) * (180 / math.pi)
+    dir_y = 1 * math.sin(45) * math.sin(45) * (180 / math.pi) * (180 / math.pi)
+    dir_z = 1 * math.cos(45) * (180 / math.pi)
+    orig_mass = copy.deepcopy(mass_kg)
+    vel_cur = to_vel(mass_kg, engine.exhaust_velocity, 0, speed_kmps/2, speed_kmps)
+    current_path = st.star_path()
+    sim_rec(total_paths,current_path,universe,d_t,engine,orig_mass,mass_kg,empty_mass,speed_kmps,x,y,z,dir_x,dir_y,dir_z)
+    return
+
+def sim_rec(total_paths,current_path,universe,d_t,engine,orig_mass,mass_kg,empty_mass,speed_kmps,x,y,z,dir_x,dir_y,dir_z):
+    dir_x,dir_y,dir_z = norm_vect(dir_x,dir_y,dir_z)
+    if (mass_kg < empty_mass or not pos_enough(dir_x,dir_y,dir_z)):
+        print("Ran out of fuel")
+        total_paths.add_path(current_path)
+        return
+    if (x < 0 or y < 0 or z < 0):
+        print("Beyond boundary")
+        return
+    x += d_t * speed_kmps * dir_x
+    y += d_t * speed_kmps * dir_y
+    z += d_t * speed_kmps * dir_z
+    #sim_rec() # Deepcopy continue forward using all fuel
+    mydis = dis_pars(x,y,z,universe)
+    buckx = map_to_unit(x,mydis,universe)
+    bucky = map_to_unit(y,mydis,universe)
+    buckz = map_to_unit(z,mydis,universe)
+    for some_star in universe.structure[buckx][bucky][buckz]:
+        if pos_enough(dir_x,dir_y,dir_z):
+            n_current_path = copy.deepcopy(current_path)
+            n_current_path.stars.append(some_star)
+            n_mass_kg, n_dir_x, n_dir_y, n_dir_z, n_x, n_y, n_z = dir_to_vel(mass_kg, engine.exhaust_velocity, speed_kmps, speed_kmps, dir_x, dir_y, dir_z, some_star)
+            for angle in [0,30,45,60,90]:
+                #grav_assist angle redefine
+                n_speed_kmps = grav_assist(speed_kmps, some_star, angle) 
+                sim_rec(total_paths,n_current_path,universe,d_t,engine,orig_mass,n_mass_kg,empty_mass,n_speed_kmps,n_x,n_y,n_z,n_dir_x,n_dir_y,n_dir_z)
     return
 
 def new_pos(x,y,z,dir_x,dir_y,dir_z,d_t,vel):
@@ -92,7 +116,6 @@ def dir_to_vel(mass_kg, v_ex, vel_cur, vel_fin, dir_x, dir_y, dir_z, dir_star):
     dir_x = dir_x + dir_star.x
     dir_y = dir_y + dir_star.y
     dir_z = dir_z + dir_star.z
-    # Add Gravity assist here! TODO
     return (mass_kg, dir_x, dir_y, dir_z, dir_star.x, dir_star.y, dir_star.z)
 
 def dot_p(x1, y1, z1, x2, y2, z2):
@@ -115,7 +138,7 @@ def map_to_unit(x,mag,universe):
 
 def grav_assist(v,some_star,angle):
     u = some_star.vel_tot()
-    new_vel = (u*2 + v)*math.sqrt(1 - ((4*u*v*(1 - (cos(angle)*180/math.pi)))/math.pow(v+2*u,2)))
+    new_vel = (u*2 + v)*math.sqrt(1 - ((4*u*v*(1 - (math.cos(angle)*180/math.pi)))/math.pow(v+2*u,2)))
     return new_vel
 
 def star_near_me(x,y,z,universe,mydis):
@@ -142,3 +165,20 @@ def star_near_me(x,y,z,universe,mydis):
         x1 += 1
     print("False: No stars in bucket")
     return
+
+def pos_enough(x,y,z):
+    pos = 0
+    if (x > 0):
+        pos += 1
+    if (y > 0):
+        pos += 1
+    if (z > 0):
+        pos += 1
+    if (pos >= 2):
+        return True
+    else:
+        return False
+
+def norm_vect(dir_x,dir_y,dir_z):
+    mag = math.sqrt(dir_x*dir_x + dir_y*dir_y + dir_z*dir_z)
+    return (dir_x/mag,dir_y/mag,dir_z/mag)

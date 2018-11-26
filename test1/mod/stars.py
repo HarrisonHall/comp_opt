@@ -70,17 +70,19 @@ class star_path:
 class star_path_set:
     paths = []
     size = 0
+    total_considered = 0
     def __init__(self,size): # Use 10 for size
         self.size = size
-    def add_path(path):
+    def add_path(self,path):
+        self.total_considered += 1
         if (len(self.paths) < self.size):
             self.paths.append(path)
-            self.paths.sort()
+            self.paths.sort(reverse=True)
         else:
-            self.paths.sort()
+            self.paths.sort(reverse=True)
             for i in range(len(self.paths)):
                 if (path.fin_vel > self.paths[i].fin_vel):
                     self.paths.insert(i,path)
-                    del[self.paths[i+1]]
+                    del[self.paths[10]]
 
         
