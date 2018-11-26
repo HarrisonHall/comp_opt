@@ -11,7 +11,7 @@ def csv_to_stars(filename):
     totdis = []
     totvel = []
     totlum = []
-    size = 100 
+    size = 15
     uni = st.universe(size)
     with open(filename) as datafile:
         hyg = csv.reader(datafile,delimiter=',',quotechar='|')
@@ -23,7 +23,7 @@ def csv_to_stars(filename):
                 x = float(row[17])
                 y = float(row[18])
                 z = float(row[19])
-                if (z > 0 and x > 0 and y > 0 and dis < 15): # Use 900000
+                if (z > 0 and x > 0 and y > 0 and dis < 40): # Use 900000
                     tot += 1
                     totx.append(x)
                     toty.append(y)

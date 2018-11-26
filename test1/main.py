@@ -18,12 +18,11 @@ ion = eng.engine("Ion Propulsion", 50, 8000, 500) # From Wikipedia 50 is max of 
 meth_ox = eng.engine("LOX-Methane", 3.8, 311, 10000) # exhaust speed in km/s
 
 base_speed = 16.25 #km/s
-
+print("\n\nStarting Sim:\n")
 sim.sim_single_one_print(universe,math.pi/4,math.pi/4,604800*52,ion,meth_ox,gross_mass,base_speed)
 # Equations used
-# Simple vector math, Tsiolkovsky's Equation, Mass-Luminosity equivalency, 
-
+# Simple vector math, Tsiolkovsky's Equation, Mass-Luminosity equivalency, "Gravitational slingshot"
 
 # Assumptions:
-# Single stage, no payload, little exterior (essentially all fuel)
+# Single stage, no payload, little exterior (essentially all fuel), all stars are main-series
 
