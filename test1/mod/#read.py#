@@ -51,7 +51,7 @@ def csv_to_stars(filename):
                     if s_star.dis > max_dis:
                         max_dis = s_star.dis
     uni.unit = max_dis / size
-    #print("Size max_distance is " + str(uni.unit) +" parsecs per 1 unit")
-    #print("num is "+str(num))
+    print("Size max_distance is " + str(uni.unit) +" parsecs per 1 unit")
+    print("num is "+str(num))
 
     return uni
