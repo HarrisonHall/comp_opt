@@ -79,7 +79,7 @@ def sim_rec(total_paths,current_path,universe,d_t,engine,orig_mass,mass_kg,empty
     if (x < 0 or y < 0 or z < 0):
         return
     mydis = dis_pars(x,y,z,universe)
-    if (map_to_unit(x,mydis,universe) > 35 or map_to_unit(y,mydis,universe) > 35 or map_to_unit(z,mydis,universe) > 35 or depth > 5):
+    if (map_to_unit(x,mydis,universe) > 35 or map_to_unit(y,mydis,universe) > 35 or map_to_unit(z,mydis,universe) > 35 or depth > 6):
         return
     # Move ship forward with respect to time
     x,y,z = new_pos(x,y,z,dir_x,dir_y,dir_z,d_t,speed_kmps)
@@ -217,5 +217,3 @@ def find_angle(x,y,z,some_star):
     x1,y1,z1 = norm_vect(km_to_par(x),1,km_to_par(z))
     sx,sy,sz = norm_vect(some_star.x,some_star.y,some_star.z)
     return (180/math.pi)*math.acos(dot_p(x1,y1,z1,sx,sy,sz)/(mag(x1,y1,z1)*mag(sx,sy,sz)))
-    
-    

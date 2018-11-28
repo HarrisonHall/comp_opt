@@ -35,7 +35,7 @@ def csv_to_stars(filename):
 
     max_cart = max([max(totx),max(toty),max(totz)]) # Will define size of 3D bucket
 
-    # Make data structure - works
+    # Make data structure
     for i in range(len(totx)):
         mag = math.sqrt(totx[i]*totx[i]+toty[i]*toty[i]+totz[i]*totz[i])
         x = math.floor(int((totx[i] *totdis[i] / mag)*size/max_cart)-1)
@@ -51,7 +51,7 @@ def csv_to_stars(filename):
                     if s_star.dis > max_dis:
                         max_dis = s_star.dis
     uni.unit = max_dis / size
-    #print("Size max_distance is " + str(uni.unit) +" parsecs per 1 unit")
-    #print("num is "+str(num))
+    print("Size max_distance is " + str(uni.unit) +" parsecs per 1 unit")
+    print("num is "+str(num))
 
     return uni

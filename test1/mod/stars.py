@@ -12,7 +12,8 @@ class star:
         self.vel_x = vel_x * 977813.106 #kmps
         self.vel_y = vel_x * 977813.106 #kmps
         self.vel_z = vel_z * 977813.106 #kmps
-        self.mass = math.pow(lum/1,1/3.5)*1.989*math.pow(10,30) # lum sun is 1, mass sun is 1.989*10^30 kg, a = 3.5 for main-series stars, mass in kg
+        # lum sun is 1, mass sun is 1.989*10^30 kg, a = 3.5 for main-series stars, mass in kg
+        self.mass = math.pow(lum/1,1/3.5)*1.989*math.pow(10,30) 
     def __str__(self):
         rstring = ""
         rstring += str(self.x) + " " + str(self.y) + " " + str(self.z)
@@ -20,7 +21,7 @@ class star:
         return rstring
     def vel_tot(self):
         return math.sqrt(self.vel_x*self.vel_x+self.vel_y*self.vel_y+self.vel_z*self.vel_z)
-
+    
 class universe:
     structure = []
     unit = 0 #parsecs
@@ -47,7 +48,6 @@ class universe:
                         xgraph.append(my_star.x)
                         ygraph.append(my_star.y)
                         zgraph.append(my_star.z)
-                        #print("x y z "+ str(my_star.x))                        
         ax.scatter3D(xgraph,ygraph,zgraph)
         plt.show()
     def graph_path_set(self,star_paths):
