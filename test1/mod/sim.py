@@ -79,7 +79,7 @@ def sim_rec(total_paths,current_path,universe,d_t,engine,orig_mass,mass_kg,empty
     if (x < 0 or y < 0 or z < 0):
         return
     mydis = dis_pars(x,y,z,universe)
-    if (map_to_unit(x,mydis,universe) > 35 or map_to_unit(y,mydis,universe) > 35 or map_to_unit(z,mydis,universe) > 35 or depth > 6):
+    if (map_to_unit(x,mydis,universe) > 10 or map_to_unit(y,mydis,universe) > 10 or map_to_unit(z,mydis,universe) > 10 or depth > 6):
         return
     # Move ship forward with respect to time
     x,y,z = new_pos(x,y,z,dir_x,dir_y,dir_z,d_t,speed_kmps)
@@ -103,7 +103,7 @@ def sim_rec(total_paths,current_path,universe,d_t,engine,orig_mass,mass_kg,empty
             n_mass_kg, n_dir_x, n_dir_y, n_dir_z, n_x, n_y, n_z = dir_to_vel(mass_kg, engine.exhaust_velocity, speed_kmps, speed_kmps, dir_x, dir_y, dir_z, some_star)
             for angle in [0,30,45,60,90]:
                 alpha = find_angle(n_x,n_y,n_z,some_star)
-                n_speed_kmps = speed_kmps*math.cos(alpha) + grav_assist(speed_kmps, some_star, angle,alpha) 
+                n_speed_kmps = speed_kmps*math.cos(alpha) + grav_assist(speed_kmps, some_star, angle,alpha,n_mass_kg) 
                 sim_rec(total_paths,n_current_path,universe,d_t,engine,orig_mass,n_mass_kg,empty_mass,n_speed_kmps,n_x,n_y,n_z,n_dir_x,n_dir_y,n_dir_z,depth)
     return
 
@@ -161,10 +161,10 @@ def map_to_unit(x,mag,universe):
     return new_x
 
 # Gravitational Assist formula implementation
-def grav_assist(v,some_star,angle,alpha):
+def grav_assist(v,some_star,angle,alpha,mass_kg):
     u = some_star.vel_tot()
     v = v*math.sin(alpha)
-    new_vel = (u*2 + v)*math.sqrt(1 - ((4*u*v*(1 - (math.cos(angle))))/math.pow(v+2*u,2)))
+    new_vel = (1-(mass_kg/some_star.mass))*(u*2 + v)*math.sqrt(1 - ((4*u*v*(1 - (math.cos(angle))))/math.pow(v+2*u,2)))
     return new_vel
 
 # Prints True if star in bucketp
