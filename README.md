@@ -55,6 +55,7 @@ The star data was retrieved from [hyg](http://www.astronexus.com/hyg).
 * Does not record time
 * Paths due not prune as much as they should
 * Only stars are plotted, not vectors
+* Contains dead code
 
 ## Running
 1. `git clone https://github.com/harrisonhall/comp`
